@@ -26,6 +26,15 @@ $router->get('/show-companies', function() {
 $router->get('/dashboard', function() {
     (new HomeController)->dashboard();
 });
+$router->get('/dashboard/new-invoices', function() {
+    (new HomeController)->newInvoices();
+});
+$router->get('/dashboard/new-companies', function() {
+    (new HomeController)->newCompanies();
+});
+$router->get('/dashboard/new-contact', function() {
+    (new HomeController)->newContact();
+});
 $router->get('/logout', function() {
     (new HomeController)->logout();
 });

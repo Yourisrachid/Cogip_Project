@@ -33,6 +33,18 @@ class HomeController extends Controller
     {
         return $this->view('dashboard');
     }
+    public function newInvoices()
+    {
+        return $this->view('new-invoices');
+    }
+    public function newCompanies()
+    {
+        return $this->view('new-companies');
+    }
+    public function newContact()
+    {
+        return $this->view('new-contact');
+    }
     public function logout()
     {
         return $this->view('logout');

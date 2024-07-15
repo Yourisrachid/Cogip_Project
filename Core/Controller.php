@@ -37,7 +37,7 @@ class Controller
                 $email = $_POST['email'];
                 $password = $_POST['password'];
             
-                $query = 'SELECT email, password FROM users WHERE email = :email';
+                $query = 'SELECT * FROM users WHERE email = :email';
                 $result = $bdd->prepare($query);
                 $result->bindParam(':email', $email, PDO::PARAM_STR);
                 $result->execute();
@@ -45,8 +45,11 @@ class Controller
 
                 if ($user && password_verify($password, $user['password'])) {
                     session_start();
-                    $_SESSION['user'] = $user;  
-                    echo "hello"; // Terminer la connexion ici !
+                    $_SESSION['user'] = $user; 
+                    $_SESSION['first_name'] = $user['first_name'];
+                    $_SESSION['last_name'] = $user['last_name'];
+                    print_r($user);
+                    //header("Location: /dashboard");
                 } else {
                     echo 'Invalid email or password';
                 }
