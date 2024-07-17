@@ -1,8 +1,10 @@
 <?php 
 
 namespace App\Core;
-use App\Models\DatabaseManager;
 use PDO;
+use Exception;
+use PDOException;
+use App\Models\DatabaseManager;
 
 class Controller 
 {

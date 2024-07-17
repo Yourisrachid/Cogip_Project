@@ -8,19 +8,19 @@ use App\Core\Controller;
 
 $router = new Router();
 
-$router->get('/', function() {
-    (new HomeController)->index();
-});
-$router->get('/dashboard', function() {
-    (new HomeController)->dashboard();
-});
+// $router->get('/', function() {
+//     (new HomeController)->index();
+// });
+// $router->get('/dashboard', function() {
+//     (new HomeController)->dashboard();
+// });
 
-$router->get('/logout', function() {
-    (new HomeController)->logout();
-});
-$router->get('/login', function() {
-    (new HomeController)->login();
-});
+// $router->get('/logout', function() {
+//     (new HomeController)->logout();
+// });
+// $router->get('/login', function() {
+//     (new HomeController)->login();
+// });
 
 
 //Companies
@@ -67,21 +67,21 @@ $router->delete('/contacts/(\d+)', function($id) {
 // Invoices
 
 
-$router->get('/invoices', function() {
-    (new Controller)->invoices();
-});
-$router->post('/new-invoices', function(){
-    (new Controller)->newInvoice();
-});
-$router->get('/all-invoices', function(){
-    (new Controller)->allInvoice();
-});
-$router->get('/last-invoices', function(){
-    (new Controller)->lastInvoice();
-});
-$router->get('/page-invoices/{page}/{limit}', function($page, $limit){
-    (new Controller)->paginatedInvoices($page, $limit);
-});
+// $router->get('/invoices', function() {
+//     (new Controller)->invoices();
+// });
+// $router->post('/new-invoices', function(){
+//     (new Controller)->newInvoice();
+// });
+// $router->get('/all-invoices', function(){
+//     (new Controller)->allInvoice();
+// });
+// $router->get('/last-invoices', function(){
+//     (new Controller)->lastInvoice();
+// });
+// $router->get('/page-invoices/{page}/{limit}', function($page, $limit){
+//     (new Controller)->paginatedInvoices($page, $limit);
+// });
 
 
 // Test connection
