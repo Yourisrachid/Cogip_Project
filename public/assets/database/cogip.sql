@@ -35,8 +35,8 @@ CREATE TABLE `companies` (
   `type_id` int(11) NOT NULL,
   `country` varchar(50) NOT NULL,
   `tva` varchar(50) NOT NULL,
-  `created_at` datetime NOT NULL CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -51,8 +51,8 @@ CREATE TABLE `contacts` (
   `company_id` int(11) NOT NULL,
   `email` varchar(50) NOT NULL,
   `phone` varchar(50) NOT NULL,
-  `created_at` datetime NOT NULL CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -65,8 +65,8 @@ CREATE TABLE `invoices` (
   `id` int(11) NOT NULL,
   `ref` varchar(50) NOT NULL,
   `id_company` int(11) NOT NULL,
-  `created_at` datetime NOT NULL CURRENT_TIMESTAMP,
-  `update_at` datetime NOT NULL CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -78,8 +78,8 @@ CREATE TABLE `invoices` (
 CREATE TABLE `permissions` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `created_at` datetime NOT NULL CURRENT_TIMESTAMP,
-  `update_at` datetime NOT NULL CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -91,8 +91,8 @@ CREATE TABLE `permissions` (
 CREATE TABLE `roles` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `created_at` datetime NOT NULL CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -116,8 +116,8 @@ CREATE TABLE `role_permission` (
 CREATE TABLE `types` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `created_at` datetime NOT NULL CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -133,8 +133,8 @@ CREATE TABLE `users` (
   `last_name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `created_at` datetime NOT NULL CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
