@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Models;
-
-use App\Core\DatabaseManager;
 use PDO;
 
 class Contact {
@@ -13,6 +11,18 @@ class Contact {
         $database = new DatabaseManager();
         $this->conn = $database->getConnection();
     }
+
+
+    /*
+        ** GET contacts
+        ** Fetch all companies : localhost:8000/contacts?all=true
+        ** Fetch page 2 and limit to 5 : localhost:8000/contacts?page=2&limit=5           -> 11-20
+        ** filter by ->  name:  Filter by name   // company_id:  Filter by company_id
+        ** sort_by: sort by ...... (ex : name)
+        ** order: sorting order (asc or desc)
+    */
+
+
 
     public function getAllContacts($page = 1, $limit = 10, $filters = [], $sort = [], $fetchAll = false) {
         $query = 'SELECT * FROM ' . $this->table . ' WHERE 1=1';
@@ -65,6 +75,16 @@ class Contact {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['count'];
     }
+
+
+
+    /*
+        ** GET contacts
+        ** Fetch contact by id : localhost:8000/contacts/2
+        ** fetch(`http://localhost:8000/contacts/${id}`);
+    */
+
+
 
     public function getContactById($id) {
         $query = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';

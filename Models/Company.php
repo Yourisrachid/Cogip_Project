@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Models;
-
-use App\Core\DatabaseManager;
 use PDO;
 
 class Company {
@@ -20,8 +18,11 @@ class Company {
         ** Fetch all companies : localhost:8000/companies?all=true
         ** Fetch page 2 : localhost:8000/companies?page=2           -> 11-20
         ** filter by ->  name:  Filter by name   // country:  Filter by country
+                Exemple : http://localhost:8000/companies?name=Spain
         ** sort_by: sort by ...... (ex : name)
         ** order: sorting order (asc or desc)
+        
+        ** Exemple : http://localhost:8000/companies?page=2&limit=5&sort_by=create_at&order=desc
     */
 
     public function getAllCompanies($page = 1, $limit = 10, $filters = [], $sort = [], $fetchAll = false) {
@@ -71,6 +72,16 @@ class Company {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /*
+        ** Exemple :
+            {
+                "name": "Company example",
+                "type_id": 4,
+                "country": "Spain",
+                "tva": "213456"
+            }
+    */
+
     public function createCompany($data) {
         $query = 'INSERT INTO ' . $this->table . ' (name, type_id, country, tva) VALUES (:name, :type_id, :country, :tva)';
         $stmt = $this->conn->prepare($query);
@@ -80,6 +91,24 @@ class Company {
         $stmt->bindParam(':tva', $data['tva']);
         return $stmt->execute();
     }
+
+
+
+    /*
+        ** Exemple :
+
+            `http://localhost:8000/companies/${id}`
+
+            {
+                "name": "Company example",
+                "type_id": 3,
+                "country": "Germany",
+                "tva": "213456"
+            }
+    */
+
+
+
 
     public function updateCompany($id, $data) {
         $query = 'UPDATE ' . $this->table . ' SET name = :name, type_id = :type_id, country = :country, tva = :tva WHERE id = :id';
@@ -91,6 +120,18 @@ class Company {
         $stmt->bindParam(':tva', $data['tva']);
         return $stmt->execute();
     }
+
+
+
+
+        /*
+        ** Exemple :
+
+            `http://localhost:8000/companies/${id}`
+        */
+
+
+
 
     public function deleteCompany($id) {
         $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';

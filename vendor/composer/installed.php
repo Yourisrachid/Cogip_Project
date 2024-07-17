@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '405840832e2075f31dd1be63e0d4d4521a9b05bf',
+        'reference' => '16d463a7f909b100e30049855916866f06ed4591',
         'name' => 'becode/base',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '405840832e2075f31dd1be63e0d4d4521a9b05bf',
+            'reference' => '16d463a7f909b100e30049855916866f06ed4591',
             'dev_requirement' => false,
         ),
         'bramus/router' => array(

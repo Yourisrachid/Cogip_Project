@@ -11,17 +11,8 @@ $router = new Router();
 $router->get('/', function() {
     (new HomeController)->index();
 });
-$router->get('/invoices', function() {
-    (new HomeController)->invoices();
-});
-$router->get('/companies', function() {
-    (new HomeController)->companies();
-});
 $router->get('/dashboard', function() {
     (new HomeController)->dashboard();
-});
-$router->get('/dashboard/new-invoices', function() {
-    (new HomeController)->newInvoices();
 });
 
 $router->get('/logout', function() {
@@ -29,6 +20,18 @@ $router->get('/logout', function() {
 });
 $router->get('/login', function() {
     (new HomeController)->login();
+});
+
+
+//Companies
+
+
+
+$router->get('/companies', function() {
+    (new HomeController)->companies();
+});
+$router->get('/companies/(\d+)', function($id) {
+    (new HomeController)->getCompany($id);
 });
 $router->post('/companies', function() {
     (new HomeController)->createCompany();
@@ -39,6 +42,9 @@ $router->put('/companies/(\d+)', function($id) {
 $router->delete('/companies/(\d+)', function($id) {
     (new HomeController)->deleteCompany($id);
 });
+
+
+// Contacts
 
 
 $router->get('/contacts', function() {
@@ -57,7 +63,30 @@ $router->delete('/contacts/(\d+)', function($id) {
     (new HomeController)->deleteContact($id);
 });
 
+
+// Invoices
+
+
+$router->get('/invoices', function() {
+    (new Controller)->invoices();
+});
+$router->post('/new-invoices', function(){
+    (new Controller)->newInvoice();
+});
+$router->get('/all-invoices', function(){
+    (new Controller)->allInvoice();
+});
+$router->get('/last-invoices', function(){
+    (new Controller)->lastInvoice();
+});
+$router->get('/page-invoices/{page}/{limit}', function($page, $limit){
+    (new Controller)->paginatedInvoices($page, $limit);
+});
+
+
 // Test connection
+
+
 $router->post('/login', function(){
     (new Controller)->connectUser();
 });

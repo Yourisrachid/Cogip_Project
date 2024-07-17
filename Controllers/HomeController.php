@@ -26,6 +26,16 @@ class HomeController extends Controller
         if (isset($_GET['country'])) {
             $filters['country'] = $_GET['country'];
         }
+        if (isset($_GET['created_at'])) {
+            $filters['created_at'] = $_GET['created_at'];
+        }
+        if (isset($_GET['updated_at'])) {
+            $filters['updated_at'] = $_GET['updated_at'];
+        }
+        if (isset($_GET['type_id'])) {
+            $filters['type_id'] = $_GET['type_id'];
+        }
+
 
         $sort = [];
         if (isset($_GET['sort_by'])) {
@@ -36,6 +46,17 @@ class HomeController extends Controller
 
         $companies = $company->getAllCompanies($page, $limit, $filters, $sort, $fetchAll);
         return $this->jsonResponse($companies);
+    }
+
+    public function getCompany($id) {
+        $company = new Company();
+        $companyData = $company->getCompanyById($id);
+        
+        if ($companyData) {
+            return $this->jsonResponse($companyData);
+        } else {
+            return $this->jsonResponse(['error' => "Can't find this company !"], 404);
+        }
     }
 
     public function createCompany()
