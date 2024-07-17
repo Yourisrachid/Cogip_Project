@@ -95,12 +95,14 @@ class Contact {
     }
 
     public function createContact($data) {
-        $query = 'INSERT INTO ' . $this->table . ' (name, company_id, email, phone) VALUES (:name, :company_id, :email, :phone)';
+        $query = 'INSERT INTO ' . $this->table . ' (name, company_id, email, phone, created_at, updated_at) VALUES (:name, :company_id, :email, :phone, :created_at, :updated_at)';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':name', $data['name']);
         $stmt->bindParam(':company_id', $data['company_id']);
         $stmt->bindParam(':email', $data['email']);
         $stmt->bindParam(':phone', $data['phone']);
+        $stmt->bindParam(':created_at', $data['created_at']);
+        $stmt->bindParam(':updated_at', $data['created_at']);
         return $stmt->execute();
     }
 

@@ -2,26 +2,27 @@
 
 namespace App\Routes;
 
-use App\Controllers\CompanySeederController;
+use App\Core\Controller;
 use Bramus\Router\Router;
 use App\Controllers\HomeController;
-use App\Core\Controller;
+use App\Controllers\CompanySeederController;
+use App\Controllers\ContactSeederController;
 
 $router = new Router();
 
-// $router->get('/', function() {
-//     (new HomeController)->index();
-// });
-// $router->get('/dashboard', function() {
-//     (new HomeController)->dashboard();
-// });
+$router->get('/', function() {
+    (new HomeController)->index();
+});
+$router->get('/dashboard', function() {
+    (new HomeController)->dashboard();
+});
 
-// $router->get('/logout', function() {
-//     (new HomeController)->logout();
-// });
-// $router->get('/login', function() {
-//     (new HomeController)->login();
-// });
+$router->get('/logout', function() {
+    (new HomeController)->logout();
+});
+$router->get('/login', function() {
+    (new HomeController)->login();
+});
 
 
 //Companies
@@ -68,21 +69,21 @@ $router->delete('/contacts/(\d+)', function($id) {
 // Invoices
 
 
-// $router->get('/invoices', function() {
-//     (new Controller)->invoices();
-// });
-// $router->post('/new-invoices', function(){
-//     (new Controller)->newInvoice();
-// });
-// $router->get('/all-invoices', function(){
-//     (new Controller)->allInvoice();
-// });
-// $router->get('/last-invoices', function(){
-//     (new Controller)->lastInvoice();
-// });
-// $router->get('/page-invoices/{page}/{limit}', function($page, $limit){
-//     (new Controller)->paginatedInvoices($page, $limit);
-// });
+$router->get('/invoices', function() {
+    (new Controller)->invoices();
+});
+$router->post('/new-invoices', function(){
+    (new Controller)->newInvoice();
+});
+$router->get('/all-invoices', function(){
+    (new Controller)->allInvoice();
+});
+$router->get('/last-invoices', function(){
+    (new Controller)->lastInvoice();
+});
+$router->get('/page-invoices/{page}/{limit}', function($page, $limit){
+    (new Controller)->paginatedInvoices($page, $limit);
+});
 
 
 // Test connection
@@ -94,6 +95,10 @@ $router->post('/login', function(){
 
 $router->get('/seed-companies', function() {
     (new CompanySeederController)->__invoke();
+});
+
+$router->get('/seed-contacts', function() {
+    (new ContactSeederController)->__invoke();
 });
 
 $router->run();
