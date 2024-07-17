@@ -6,7 +6,23 @@ use Bramus\Router\Router;
 use App\Controllers\HomeController;
 use App\Core\Controller;
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $router = new Router();
+
+$router->before('GET|POST', '/(?!login|logout).*', function() {
+    if (!isset($_SESSION['user'])) {
+        $response = ['status' => 404, 'message' => 'Not authenticated'];
+        $controller = new Controller();
+        //var_dump($controller);
+        $message = $controller->returnJson($response);
+        echo $message;
+        exit();
+    }
+});
+
 
 $router->get('/', function() {
     (new HomeController)->index();
@@ -58,8 +74,14 @@ $router->get('/all-invoices', function(){
 $router->get('/last-invoices', function(){
     (new Controller)->lastInvoice();
 });
-$router->get('/page-invoices/{page}/{limit}', function($page, $limit){
-    (new Controller)->paginatedInvoices($page, $limit);
+$router->get('/page-invoices', function(){
+    (new Controller)->paginatedInvoices();
+});
+$router->get('/update-invoices/(\d+)', function($id){
+    (new Controller)->updateInvoices($id);
+});
+$router->Delete('/delete-invoices/(\d+)', function($id){
+    (new Controller)->deleteInvoice($id);
 });
 
 

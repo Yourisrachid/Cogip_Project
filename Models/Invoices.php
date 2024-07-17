@@ -3,12 +3,16 @@ namespace App\Models;
 use App\Models\DatabaseManager;
 use PDO;
 
-class Invoice
+class Invoices
 {
     private $table = 'invoices';
     private $dbManager;
 
-    public $id;
+    public function __construct()
+    {
+        $this->dbManager = new DatabaseManager();
+    }
+    /*public $id;
     public $ref;
     public $price;
     public $id_company;
@@ -25,7 +29,7 @@ class Invoice
         $this->update_at = $update_at;
 
         
-    }
+    }*/
 
     public function formatPublishDate($format = 'Y-m-d\TH:i:s\Z', $dateType = 'created_at')
     {
