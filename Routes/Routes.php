@@ -42,9 +42,25 @@ $router->get('/login', function() {
     (new HomeController)->login();
 });
 
-//test connection
+//route API
 $router->post('/login', function(){
     (new Controller)->connectUser();
 });
+$router->post('/logout', function(){
+    (new Controller)->logoutUser();
+});
+$router->post('/new-invoices', function(){
+    (new Controller)->newInvoice();
+});
+$router->get('/all-invoices', function(){
+    (new Controller)->allInvoice();
+});
+$router->get('/last-invoices', function(){
+    (new Controller)->lastInvoice();
+});
+$router->get('/page-invoices/{page}/{limit}', function($page, $limit){
+    (new Controller)->paginatedInvoices($page, $limit);
+});
+
 
 $router->run();
