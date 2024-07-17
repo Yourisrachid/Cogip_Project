@@ -1,6 +1,7 @@
 <?php 
 
 namespace App\Core;
+use App\Models\DatabaseManager;
 use PDO;
 
 class Controller 
@@ -62,33 +63,42 @@ class Controller
         }
     }
 
-}
 
 
-// temporairement ici !
-class DatabaseManager
-{
-    private $bdd;
-
-    public function __construct()
+    public function newInvoice()
     {
-        $this->connectDatabase();
+        echo $this->postNewInvoice();
     }
 
-    private function connectDatabase()
+    public function postNewInvoice()
     {
         try {
-            $this->bdd = new PDO('mysql:host=localhost;dbname=cogip;charset=utf8', 'root', 'root');
-            $this->bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $bdd = $this->dbManager->getConnection();
+            $ref = $_POST['ref'];
+            $id_company = $_POST['id_company'];
+            $price = $_POST['price'];
+
+            $query = 'INSERT INTO invoices(ref, id_company, price, created_at, update_at)
+                    VALUE (:ref, :id_company, :price, NOW(), NOW())';
+            $result = $bdd->prepare($query);
+            $result->bindParam(':ref', $ref, PDO::PARAM_STR);
+            $result->bindParam(':id_company', $id_company, PDO::PARAM_STR);
+            $result->bindParam(':price', $price, PDO::PARAM_STR);
+            $result->execute();
+
+            $response = $this->responseObject->Response(201, 'invoice created successfully');
+            return $this->json($response);
         } catch (PDOException $e) {
-            echo 'Connection failed: ' . $e->getMessage();
+            return $this->json([
+                'status' => 500,
+                'message' => 'Database error: ' . $e->getMessage()
+            ]);
+        } catch (Exception $e) {
+            return $this->json([
+                'status' => 400,
+                'message' => 'Error: ' . $e->getMessage()
+            ]);
         }
-        
     }
 
-    public function getConnection()
-    {
-        return $this->bdd;
-    }
 }
-
