@@ -2,6 +2,7 @@
 
 namespace App\Routes;
 
+use App\Controllers\CompanySeederController;
 use Bramus\Router\Router;
 use App\Controllers\HomeController;
 use App\Core\Controller;
@@ -89,6 +90,10 @@ $router->delete('/contacts/(\d+)', function($id) {
 
 $router->post('/login', function(){
     (new Controller)->connectUser();
+});
+
+$router->get('/seed-companies', function() {
+    (new CompanySeederController)->__invoke();
 });
 
 $router->run();

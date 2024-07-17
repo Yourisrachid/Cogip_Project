@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 use PDO;
+use PDOException;
 
 class DatabaseManager
 {
@@ -14,12 +15,11 @@ class DatabaseManager
     private function connectDatabase()
     {
         try {
-            $this->bdd = new PDO('mysql:host=localhost;dbname=cogip;charset=utf8', 'becode', 'becode');
+            $this->bdd = new PDO('mysql:host=localhost;dbname=cogip;charset=utf8', 'root', 'root');
             $this->bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }
-        
     }
 
     public function getConnection()

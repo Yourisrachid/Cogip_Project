@@ -141,12 +141,6 @@ CREATE TABLE `users` (
 -- Index pour les tables déchargées
 --
 
---
--- Index pour la table `companies`
---
-ALTER TABLE `companies`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `type_id` (`type_id`);
 
 --
 -- Index pour la table `contacts`

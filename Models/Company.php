@@ -83,12 +83,14 @@ class Company {
     */
 
     public function createCompany($data) {
-        $query = 'INSERT INTO ' . $this->table . ' (name, type_id, country, tva) VALUES (:name, :type_id, :country, :tva)';
+        $query = 'INSERT INTO ' . $this->table . ' (name, type_id, country, tva, created_at, updated_at) VALUES (:name, :type_id, :country, :tva, :created_at, :updated_at)';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':name', $data['name']);
         $stmt->bindParam(':type_id', $data['type_id']);
         $stmt->bindParam(':country', $data['country']);
         $stmt->bindParam(':tva', $data['tva']);
+        $stmt->bindParam(':created_at', $data['created_at']);
+        $stmt->bindParam(':updated_at', $data['created_at']);
         return $stmt->execute();
     }
 
