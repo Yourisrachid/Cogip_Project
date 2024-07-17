@@ -175,10 +175,15 @@ class Controller
         $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 
         $filters = [];
-        if (isset($_GET['name'])) {
-            $filters['name'] = $_GET['name'];
+        if (isset($_GET['ref'])) {
+            $filters['ref'] = $_GET['ref'];
         }
-        
+        if (isset($_GET['price'])) {
+            $filters['price'] = $_GET['price'];
+        }
+        if (isset($_GET['id_company'])) {
+            $filters['id_company'] = $_GET['id_company'];
+        }
         $sort = [];
         if (isset($_GET['sort_by'])) {
             $sort[$_GET['sort_by']] = isset($_GET['order']) && strtolower($_GET['order']) === 'desc' ? 'DESC' : 'ASC';
