@@ -2,87 +2,80 @@
 
 namespace App\Routes;
 
-use App\Core\Controller;
 use Bramus\Router\Router;
 use App\Controllers\HomeController;
-use App\Controllers\CompanySeederController;
-use App\Controllers\ContactSeederController;
+use App\Controllers\UserController;
+use App\Core\Middleware;
 
 $router = new Router();
 
 $router->get('/', function() {
     (new HomeController)->index();
 });
-$router->get('/dashboard', function() {
-    (new HomeController)->dashboard();
-});
 
-$router->get('/logout', function() {
-    (new HomeController)->logout();
-});
-$router->get('/login', function() {
+$router->post('/login', function() {
     (new HomeController)->login();
 });
 
 
-//Companies
-
+// Companies
 
 
 $router->get('/companies', function() {
+    Middleware::permission('view_companies');
+    Middleware::sessionTimeout();
     (new HomeController)->companies();
 });
 $router->get('/companies/(\d+)', function($id) {
+    Middleware::permission('view_company');
+    Middleware::sessionTimeout();
     (new HomeController)->getCompany($id);
 });
 $router->post('/companies', function() {
+    Middleware::permission('create_company');
+    Middleware::sessionTimeout();
     (new HomeController)->createCompany();
 });
 $router->put('/companies/(\d+)', function($id) {
+    Middleware::permission('edit_company');
+    Middleware::sessionTimeout();
     (new HomeController)->updateCompany($id);
 });
 $router->delete('/companies/(\d+)', function($id) {
+    Middleware::permission('delete_company');
+    Middleware::sessionTimeout();
     (new HomeController)->deleteCompany($id);
 });
+
 
 
 // Contacts
 
 
 $router->get('/contacts', function() {
+    Middleware::permission('view_contacts');
+    Middleware::sessionTimeout();
     (new HomeController)->contacts();
 });
 $router->get('/contacts/(\d+)', function($id) {
+    Middleware::permission('view_contact');
+    Middleware::sessionTimeout();
     (new HomeController)->getContact($id);
 });
 $router->post('/contacts', function() {
+    Middleware::permission('create_contact');
+    Middleware::sessionTimeout();
     (new HomeController)->createContact();
 });
 $router->put('/contacts/(\d+)', function($id) {
+    Middleware::permission('edit_contact');
+    Middleware::sessionTimeout();
     (new HomeController)->updateContact($id);
 });
 $router->delete('/contacts/(\d+)', function($id) {
+    Middleware::permission('delete_contact');
+    Middleware::sessionTimeout();
     (new HomeController)->deleteContact($id);
-});
-
-
-// Invoices
-
-
-$router->get('/invoices', function() {
-    (new Controller)->invoices();
-});
-$router->post('/new-invoices', function(){
-    (new Controller)->newInvoice();
-});
-$router->get('/all-invoices', function(){
-    (new Controller)->allInvoice();
-});
-$router->get('/last-invoices', function(){
-    (new Controller)->lastInvoice();
-});
-$router->get('/page-invoices/{page}/{limit}', function($page, $limit){
-    (new Controller)->paginatedInvoices($page, $limit);
 });
 
 
@@ -90,15 +83,15 @@ $router->get('/page-invoices/{page}/{limit}', function($page, $limit){
 
 
 $router->post('/login', function(){
-    (new Controller)->connectUser();
+    (new HomeController)->connectUser();
 });
 
-$router->get('/seed-companies', function() {
-    (new CompanySeederController)->__invoke();
+
+
+
+$router->post('/register', function() {
+    (new HomeController)->register();
 });
 
-$router->get('/seed-contacts', function() {
-    (new ContactSeederController)->__invoke();
-});
 
 $router->run();
