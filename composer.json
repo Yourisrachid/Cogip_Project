@@ -6,7 +6,8 @@
         }
     },
     "require": {
-        "bramus/router": "^1.6",
-        "filp/whoops": "^2.14"
+        "bramus/router": "~1.6",
+        "filp/whoops": "^2.14",
+        "fakerphp/faker": "^1.23"
     }
 }

@@ -7,6 +7,9 @@ use App\Models\Invoices;
 use App\Models\Users;
 use App\Models\DatabaseManager;
 use PDO;
+use Exception;
+use PDOException;
+
 
 class Controller 
 {
@@ -221,6 +224,21 @@ class Controller
     public function postNewInvoice()
     {
         try {
+            $bdd = $this->dbManager->getConnection();
+            $ref = $_POST['ref'];
+            $id_company = $_POST['id_company'];
+            $price = $_POST['price'];
+
+            $query = 'INSERT INTO invoices(ref, id_company, price, created_at, update_at)
+                    VALUE (:ref, :id_company, :price, NOW(), NOW())';
+            $result = $bdd->prepare($query);
+            $result->bindParam(':ref', $ref, PDO::PARAM_STR);
+            $result->bindParam(':id_company', $id_company, PDO::PARAM_STR);
+            $result->bindParam(':price', $price, PDO::PARAM_STR);
+            $result->execute();
+
+            $response = $this->responseObject->Response(201, 'invoice created successfully');
+            return $this->json($response);
             $bdd = $this->dbManager->getConnection();
             $ref = $_POST['ref'];
             $id_company = $_POST['id_company'];
