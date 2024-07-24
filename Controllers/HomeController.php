@@ -2,9 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Core\Controller;
 use App\Models\Company;
 use App\Models\Contact;
+use App\Models\Invoice;
+use App\Core\Controller;
 
 class HomeController extends Controller
 {
@@ -188,15 +189,46 @@ class HomeController extends Controller
         }
     }
 
-
-
-
-
-
     private function jsonResponse($data, $status = 200)
     {
         http_response_code($status);
         header('Content-Type: application/json');
         echo json_encode($data);
+    }
+
+    /////// Invoices ///////
+
+    public function invoices()
+    { 
+        $invoice = new Invoice();
+
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+
+        $filters = [];
+        if (isset($_GET['ref'])) {
+            $filters['ref'] = $_GET['ref'];
+        }
+        if (isset($_GET['price'])) {
+            $filters['price'] = $_GET['price'];
+        }
+
+        $sort = [];
+        if (isset($_GET['sort_by'])) {
+            $sort[$_GET['sort_by']] = isset($_GET['order']) && strtolower($_GET['order']) === 'desc' ? 'DESC' : 'ASC';
+        }
+
+        $fetchAll = isset($_GET['all']) && $_GET['all'] == 'true';
+
+        $invoices = $invoice->getAllInvoices($page, $limit, $filters, $sort, $fetchAll);
+        $totalInvoices = $invoice->getInvoicesCount($filters);
+
+        $response = [
+            'data' => $invoices,
+            'current_page' => $page,
+            'total_pages' => ceil($totalInvoices / $limit)
+        ];
+
+        return $this->jsonResponse($response);
     }
 }

@@ -1,30 +1,19 @@
 <?php
 namespace App\Models;
-use App\Models\DatabaseManager;
+
 use PDO;
+use DateTime;
+use App\Models\DatabaseManager;
 
 class Invoice
 {
     private $table = 'invoices';
     private $dbManager;
-
-    public $id;
-    public $ref;
-    public $price;
-    public $id_company;
-    public $created_at;
-    public $update_at;
-
-    public function __construct(int $id, string $ref, float $price, int $id_company, string $created_at, string $update_at)
+    private $conn;
+    public function __construct()
     {
-        $this->id = $id;
-        $this->ref = $ref;
-        $this->price = $price;
-        $this->id_company = $id_company;
-        $this->created_at = $created_at;
-        $this->update_at = $update_at;
-
-        
+        $database = new DatabaseManager();
+        $this->conn = $database->getConnection();
     }
 
     public function formatPublishDate($format = 'Y-m-d\TH:i:s\Z', $dateType = 'created_at')
@@ -36,7 +25,8 @@ class Invoice
         return null;
     }
 
-    public function getAllInvoices($page = 1, $limit = 10, $filters = [], $sort = [], $fetchAll = false) {
+    public function getAllInvoices($page = 1, $limit = 10, $filters = [], $sort = [], $fetchAll = false)
+    {
         $query = 'SELECT * FROM ' . $this->table . ' WHERE 1=1';
 
         foreach ($filters as $key => $value) {
@@ -44,7 +34,7 @@ class Invoice
         }
 
         if (!empty($sort)) {
-            $query .= ' ORDER BY ' . implode(', ', array_map(function($key, $value) {
+            $query .= ' ORDER BY ' . implode(', ', array_map(function ($key, $value) {
                 return $key . ' ' . $value;
             }, array_keys($sort), $sort));
         }
@@ -65,8 +55,75 @@ class Invoice
             $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
             $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         }
-           
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getInvoiceById($id)
+    {
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+
+    public function createInvoice($data)
+    {
+        $query = 'INSERT INTO ' . $this->table . ' (ref, price, id_company, created_at, updated_at) VALUES (:ref, :price, :id_company, :created_at, :updated_at)';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':ref', $data['ref']);
+        $stmt->bindParam(':price', $data['price']);
+        $stmt->bindParam(':id_company', $data['id_company']);
+        $stmt->bindParam(':created_at', $data['created_at']);
+        $stmt->bindParam(':updated_at', $data['created_at']);
+        return $stmt->execute();
+    }
+
+    public function updateInvoice($id, $data)
+    {
+        $query = 'UPDATE ' . $this->table . ' SET ref = :ref, price = :price, id_company = :id_company, created_at = :created_at, updated_at = :updated_at WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':ref', $data['ref']);
+        $stmt->bindParam(':price', $data['price']);
+        $stmt->bindParam(':id_company', $data['id_company']);
+        $stmt->bindParam(':created_at', $data['created_at']);
+        $stmt->bindParam(':updated_at', $data['updated_at']);
+        return $stmt->execute();
+    }
+
+
+
+
+
+
+    public function deleteInvoice($id)
+    {
+        $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function getInvoicesCount($filters = []) {
+        $query = 'SELECT COUNT(*) as count FROM ' . $this->table . ' WHERE 1=1';
+
+        foreach ($filters as $key => $value) {
+            $query .= ' AND ' . $key . ' = :' . $key;
+        }
+
+        $stmt = $this->conn->prepare($query);
+
+        foreach ($filters as $key => $value) {
+            $stmt->bindParam(':' . $key, $value);
+        }
+
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['count'];
     }
 }

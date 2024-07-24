@@ -7,6 +7,7 @@ use Bramus\Router\Router;
 use App\Controllers\HomeController;
 use App\Controllers\CompanySeederController;
 use App\Controllers\ContactSeederController;
+use App\Controllers\InvoiceSeederController;
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -14,16 +15,16 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $router = new Router();
 
-$router->before('GET|POST', '/(?!login|logout|signup).*', function() {
-    if (!isset($_SESSION['user'])) {
-        $response = ['status' => 403, 'message' => 'Not authenticated'];
-        $controller = new Controller();
-        //var_dump($controller);
-        $message = $controller->returnJson($response);
-        echo $message;
-        exit();
-    }
-});
+// $router->before('GET|POST', '/(?!login|logout|signup).*', function() {
+//     if (!isset($_SESSION['user'])) {
+//         $response = ['status' => 403, 'message' => 'Not authenticated'];
+//         $controller = new Controller();
+//         //var_dump($controller);
+//         $message = $controller->returnJson($response);
+//         echo $message;
+//         exit();
+//     }
+// });
 
 $router->mount('/admin', function() use ($router) {
     $router->before('GET|POST', '/.*', function() {
@@ -62,16 +63,16 @@ $router->mount('/moderator', function() use ($router) {
 $router->get('/', function() {
     (new HomeController)->index();
 });
-$router->get('/dashboard', function() {
-    (new HomeController)->dashboard();
-});
+// $router->get('/dashboard', function() {
+//     (new HomeController)->dashboard();
+// });
 
-$router->get('/logout', function() {
-    (new HomeController)->logout();
-});
-$router->get('/login', function() {
-    (new HomeController)->login();
-});
+// $router->get('/logout', function() {
+//     (new HomeController)->logout();
+// });
+// $router->get('/login', function() {
+//     (new HomeController)->login();
+// });
 
 
 //Companies
@@ -119,20 +120,20 @@ $router->delete('/contacts/(\d+)', function($id) {
 
 
 $router->get('/invoices', function() {
-    (new Controller)->invoices();
+    (new HomeController)->invoices();
 });
-$router->post('/new-invoices', function(){
-    (new Controller)->newInvoice();
-});
-$router->get('/all-invoices', function(){
-    (new Controller)->allInvoice();
-});
-$router->get('/last-invoices', function(){
-    (new Controller)->lastInvoice();
-});
-$router->get('/page-invoices/{page}/{limit}', function($page, $limit){
-    (new Controller)->paginatedInvoices($page, $limit);
-});
+// $router->post('/new-invoices', function(){
+//     (new Controller)->newInvoice();
+// });
+// $router->get('/all-invoices', function(){
+//     (new Controller)->allInvoice();
+// });
+// $router->get('/last-invoices', function(){
+//     (new Controller)->lastInvoice();
+// });
+// $router->get('/page-invoices/{page}/{limit}', function($page, $limit){
+//     (new Controller)->paginatedInvoices($page, $limit);
+// });
 
 
 // Test connection
@@ -151,24 +152,24 @@ $router->post('/logout', function(){
 $router->get('/user', function(){
     (new Controller)->allUser();
 });
-$router->post('/new-invoices', function(){
-    (new Controller)->newInvoice();
-});
-$router->get('/all-invoices', function(){
-    (new Controller)->allInvoice();
-});
-$router->get('/last-invoices', function(){
-    (new Controller)->lastInvoice();
-});
-$router->get('/page-invoices', function(){
-    (new Controller)->paginatedInvoices();
-});
-$router->get('/update-invoices/(\d+)', function($id){
-    (new Controller)->updateInvoices($id);
-});
-$router->Delete('/delete-invoices/(\d+)', function($id){
-    (new Controller)->deleteInvoice($id);
-});
+// $router->post('/new-invoices', function(){
+//     (new Controller)->newInvoice();
+// });
+// $router->get('/all-invoices', function(){
+//     (new Controller)->allInvoice();
+// });
+// $router->get('/last-invoices', function(){
+//     (new Controller)->lastInvoice();
+// });
+// $router->get('/page-invoices', function(){
+//     (new Controller)->paginatedInvoices();
+// });
+// $router->get('/update-invoices/(\d+)', function($id){
+//     (new Controller)->updateInvoices($id);
+// });
+// $router->Delete('/delete-invoices/(\d+)', function($id){
+//     (new Controller)->deleteInvoice($id);
+// });
 
 
 $router->get('/seed-companies', function() {
@@ -177,6 +178,10 @@ $router->get('/seed-companies', function() {
 
 $router->get('/seed-contacts', function() {
     (new ContactSeederController)->__invoke();
+});
+
+$router->get('/seed-invoices', function() {
+    (new InvoiceSeederController)->__invoke();
 });
 
 $router->run();

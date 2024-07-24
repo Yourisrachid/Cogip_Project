@@ -345,8 +345,8 @@ ALTER TABLE `contacts`
 --
 -- Index pour la table `invoices`
 --
-ALTER TABLE `invoices`
-  ADD PRIMARY KEY (`id`);
+-- ALTER TABLE `invoices`
+--   ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `permissions`
@@ -384,9 +384,8 @@ ALTER TABLE `types`
 --
 -- Index pour la table `users`
 --
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `role_id` (`role_id`);
+-- ALTER TABLE `users`
+--   ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
