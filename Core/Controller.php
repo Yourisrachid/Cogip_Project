@@ -1,6 +1,7 @@
 <?php 
 
 namespace App\Core;
+
 use App\Models\Response;
 use App\Models\Invoice;
 use App\Models\Invoices;
@@ -89,7 +90,7 @@ class Controller
 
                     return $this->jsonResponse(['message' => 'Login successful', 'user' => $user]);
                 } else {
-                    return $this->jsonResponse(['error' => $this->json($response = $this->responseObject->Response('400', 'Invalid email or password'], 401)));
+                    return $this->jsonResponse(['error' => $this->json($this->responseObject->Response('400', 'Invalid email or password'))], 401);
                 }
             } else {
                 return $this->jsonResponse(['error' => 'Email and password are required'], 400);
@@ -110,10 +111,10 @@ class Controller
 
 
 
-    public function newInvoice()
-    {
-        echo $this->postNewInvoice();
-    }
+    // public function newInvoice()
+    // {
+    //     echo $this->postNewInvoice();
+    // }
     public function newUser()
     {
         return $this->postNewUser();

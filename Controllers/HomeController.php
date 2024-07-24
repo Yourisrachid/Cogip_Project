@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use PDO;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Invoice;
