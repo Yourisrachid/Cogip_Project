@@ -245,15 +245,15 @@ class HomeController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = json_decode(file_get_contents("php://input"), true);
 
-            if (!isset($data['first_name']) || !isset($data['last_name']) || !isset($data['email']) || !isset($data['password']) || !isset($data['role_id'])) {
-                return $this->jsonResponse(['error' => 'Invalid input'], 400);
+            if (!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['email']) || !isset($data['password'])) {
+                return $this->jsonResponse(['error' => 'Invalid input'], 422);
             }
 
-            $first_name = $data['first_name'];
-            $last_name = $data['last_name'];
+            $first_name = $data['firstname'];
+            $last_name = $data['lastname'];
             $email = $data['email'];
-            $password = password_hash($data['password'], PASSWORD_BCRYPT);
-            $role_id = $data['role_id'];
+            $password = password_hash($data['password'], PASSWORD_DEFAULT);
+            $role_id = $data['role_id'] ?? 1;
 
             $bdd = $this->dbManager->getConnection();
             $query = 'INSERT INTO users (first_name, last_name, email, password, role_id, created_at, updated_at) VALUES (:first_name, :last_name, :email, :password, :role_id, NOW(), NOW())';

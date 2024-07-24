@@ -8,6 +8,7 @@ use Bramus\Router\Router;
 use App\Controllers\HomeController;
 use App\Controllers\UserController;
 use App\Controllers\CompanySeederController;
+use App\Controllers\ContactSeederController;
 use App\Controllers\InvoiceSeederController;
 
 // if (session_status() === PHP_SESSION_NONE) {
@@ -195,6 +196,10 @@ $router->post('/login', function () {
 
 $router->get('/seed-companies', function () {
     (new CompanySeederController)->__invoke();
+});
+
+$router->get('/seed-contacts', function () {
+    (new ContactSeederController)->__invoke();
 });
 
 $router->post('/register', function () {
