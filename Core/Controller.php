@@ -4,6 +4,7 @@ namespace App\Core;
 use App\Models\Response;
 use App\Models\Invoice;
 use App\Models\Invoices;
+use App\Models\Users;
 use App\Models\DatabaseManager;
 use PDO;
 
@@ -68,7 +69,8 @@ class Controller
                     $_SESSION['user'] = $user; 
                     $_SESSION['first_name'] = $user['first_name'];
                     $_SESSION['last_name'] = $user['last_name'];
-                    $data = ['first_name' =>  $user['first_name'], 'last_name' => $user['last_name']];
+                    $_SESSION['role_id'] = $user['role_id'];
+                    $data = ['first_name' =>  $user['first_name'], 'last_name' => $user['last_name'], 'role_id' => $user['role_id']];
                 } else {
                     echo $this->json($response = $this->responseObject->Response('400', 'Invalid email or password'));
                 }
@@ -106,6 +108,109 @@ class Controller
         }
             echo $this->json($response= $this->responseObject->Response(200, 'disconnected'));
             exit();
+    }
+    public function newUser()
+    {
+        return $this->postNewUser();
+    }
+
+    private function postNewUser() 
+    {
+        try {
+            $bdd = $this->dbManager->getConnection();
+            if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['password'])) {
+                
+                $first_name = htmlspecialchars(trim($_POST['first_name']));
+                $last_name = htmlspecialchars(trim($_POST['last_name']));
+                $email = htmlspecialchars(trim($_POST['email']));
+                $password = htmlspecialchars(trim($_POST['password']));
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                $checkQuery = 'SELECT COUNT(*) FROM `users` WHERE email = :email';
+                $check = $bdd->prepare($checkQuery);
+                $check->bindParam(':email', $email, PDO::PARAM_STR);
+                $check->execute();
+                $emailExists = $check->fetchColumn();
+
+                if ($emailExists > 0) {
+                    echo $this->json($this->responseObject->Response('400', 'Email already exists'));
+                    return;
+                }
+                
+                $query = 'INSERT INTO `users` (first_name, last_name, email, password, created_at, updated_at) 
+                        VALUES (:first_name, :last_name, :email, :password, NOW(), NOW())';
+                $result = $bdd->prepare($query);
+                $result->bindParam(':first_name', $first_name, PDO::PARAM_STR);
+                $result->bindParam(':last_name', $last_name, PDO::PARAM_STR);
+                $result->bindParam(':email', $email, PDO::PARAM_STR);
+                $result->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+
+                if ($result->execute()) {
+                    //echo $this->json($this->responseObject->Response('201', 'User created successfully'));
+                    $userId = $bdd->lastInsertId();
+    
+                    $result = $bdd->prepare('SELECT * FROM `users` WHERE id = :id');
+                    $result->bindValue(':id', $userId);
+                    $result->execute();
+    
+                    $user = $result->fetch(PDO::FETCH_ASSOC);
+    
+                    if ($user) {
+                        $_SESSION['user'] = $user;
+                        $_SESSION['first_name'] = $user['first_name'];
+                        $_SESSION['last_name'] = $user['last_name'];
+                        $_SESSION['role_id'] = $user['role_id'];
+                        $data = ['first_name' =>  $user['first_name'], 'last_name' => $user['last_name'], 'role_id' => $user['role_id']];
+                        echo $this->json($response= $this->responseObject->ResponseData('200', 'Connected', $data));
+                    }
+                }
+            } else {
+                echo $this->json($this->responseObject->Response('400', 'firstname, lastname and password are required'));
+            }  
+        } catch (PDOException $e) {
+            return $this->json([
+                'status' => 500,
+                'message' => 'Database error: ' . $e->getMessage()
+            ]);
+        } catch (Exception $e) {
+            return $this->json([
+                'status' => 400,
+                'message' => 'Error: ' . $e->getMessage()
+            ]);
+        }
+    }
+    public function allUser()
+    {
+        echo $this->getAllUsers();
+    }
+    public function getAllUsers() {
+        $user = new Users();
+
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+
+        $filters = [];
+        if (isset($_GET['first_name'])) {
+            $filters['first_name'] = $_GET['first_name'];
+        }
+        if (isset($_GET['last_name'])) {
+            $filters['last_name'] = $_GET['last_name'];
+        }
+        if (isset($_GET['role_id'])) {
+            $filters['role_id'] = $_GET['role_id'];
+        }
+        if (isset($_GET['email'])) {
+            $filters['email'] = $_GET['email'];
+        }
+        $sort = [];
+        if (isset($_GET['sort_by'])) {
+            $sort[$_GET['sort_by']] = isset($_GET['order']) && strtolower($_GET['order']) === 'desc' ? 'DESC' : 'ASC';
+        }
+
+        $fetchAll = isset($_GET['all']) && $_GET['all'] == 'true';
+        
+        $users = $user->getAllUser($page, $limit, $filters, $sort, $fetchAll);
+        return $this->json($response= $this->responseObject->ResponseData(200, 'OK', $users));
     }
 
     public function newInvoice()
@@ -163,7 +268,6 @@ class Controller
         if ($startDate && $endDate) {
             $query .= ' WHERE created_at BETWEEN :startDate AND :endDate';
         }
-
         $query .= ' LIMIT :limit OFFSET :offset';*/
         echo $this->getInvoices();
     }
