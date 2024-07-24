@@ -46,7 +46,16 @@ class HomeController extends Controller
         $fetchAll = isset($_GET['all']) && $_GET['all'] == 'true';
 
         $companies = $company->getAllCompanies($page, $limit, $filters, $sort, $fetchAll);
-        return $this->jsonResponse($companies);
+
+        $totalCompanies = $company->getCompaniesCount($filters);
+
+
+        $response = [
+            'data' => $companies,
+            'current_page' => $page,
+            'total_pages' => ceil($totalCompanies / $limit)
+        ];
+        return $this->jsonResponse($response);
     }
 
     public function getCompany($id) {

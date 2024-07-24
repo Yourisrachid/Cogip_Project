@@ -8,7 +8,6 @@ use App\Models\DatabaseManager;
 class Invoice
 {
     private $table = 'invoices';
-    private $dbManager;
     private $conn;
     public function __construct()
     {
@@ -44,8 +43,7 @@ class Invoice
             $query .= ' LIMIT :limit OFFSET :offset';
         }
 
-        $bdd = $this->dbManager->getConnection();
-        $stmt = $bdd->prepare($query);
+        $stmt = $this->conn->prepare($query);
 
         foreach ($filters as $key => $value) {
             $stmt->bindParam(':' . $key, $value);

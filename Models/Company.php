@@ -141,4 +141,22 @@ class Company {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    public function getCompaniesCount($filters = []) {
+        $query = 'SELECT COUNT(*) as count FROM ' . $this->table . ' WHERE 1=1';
+
+        foreach ($filters as $key => $value) {
+            $query .= ' AND ' . $key . ' = :' . $key;
+        }
+
+        $stmt = $this->conn->prepare($query);
+
+        foreach ($filters as $key => $value) {
+            $stmt->bindParam(':' . $key, $value);
+        }
+
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['count'];
+    }
 }
