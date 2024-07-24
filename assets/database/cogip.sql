@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mer. 17 juil. 2024 à 20:09
+-- Généré le : mer. 24 juil. 2024 à 21:17
 -- Version du serveur : 11.3.2-MariaDB
 -- Version de PHP : 8.3.6
 
@@ -40,11 +40,6 @@ CREATE TABLE `companies` (
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Tronquer la table avant d'insérer `companies`
---
-
-TRUNCATE TABLE `companies`;
 --
 -- Déchargement des données de la table `companies`
 --
@@ -119,11 +114,6 @@ CREATE TABLE `contacts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Tronquer la table avant d'insérer `contacts`
---
-
-TRUNCATE TABLE `contacts`;
---
 -- Déchargement des données de la table `contacts`
 --
 
@@ -187,20 +177,70 @@ INSERT INTO `contacts` (`id`, `name`, `company_id`, `email`, `phone`, `created_a
 
 DROP TABLE IF EXISTS `invoices`;
 CREATE TABLE `invoices` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `ref` varchar(50) NOT NULL,
   `price` varchar(50) NOT NULL,
   `id_company` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
-  `update_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Tronquer la table avant d'insérer `invoices`
+-- Déchargement des données de la table `invoices`
 --
 
-TRUNCATE TABLE `invoices`;
+INSERT INTO `invoices` (`id`, `ref`, `price`, `id_company`, `created_at`, `updated_at`) VALUES
+(1, '96302149', '401', 52, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(2, '33712246', '175', 12, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(3, '85304970', '173', 13, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(4, '39793782', '339', 47, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(5, '56287264', '496', 38, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(6, '00517577', '137', 43, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(7, '78055551', '498', 21, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(8, '86030557', '247', 6, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(9, '26846682', '463', 24, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(10, '40920160', '237', 44, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(11, '28587231', '327', 6, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(12, '46914354', '420', 52, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(13, '31834575', '57', 6, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(14, '40144870', '55', 32, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(15, '11809555', '173', 47, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(16, '93616676', '112', 40, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(17, '55221825', '305', 11, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(18, '22901910', '45', 30, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(19, '81188703', '225', 25, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(20, '81163656', '256', 23, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(21, '49279818', '154', 26, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(22, '90228865', '190', 40, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(23, '01890679', '206', 51, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(24, '07389283', '454', 31, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(25, '70399837', '82', 6, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(26, '28892755', '136', 9, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(27, '56567380', '430', 5, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(28, '50755080', '314', 20, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(29, '87840735', '466', 17, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(30, '44466268', '343', 50, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(31, '45438318', '2', 26, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(32, '54192140', '91', 34, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(33, '68549787', '345', 35, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(34, '73915881', '377', 27, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(35, '69317866', '224', 52, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(36, '66740391', '284', 32, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(37, '77567895', '412', 49, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(38, '88027821', '183', 15, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(39, '64360256', '342', 39, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(40, '64134383', '183', 36, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(41, '49911282', '257', 49, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(42, '43069071', '324', 20, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(43, '97742487', '180', 28, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(44, '57651064', '470', 37, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(45, '83298721', '168', 24, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(46, '45179853', '188', 28, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(47, '18651966', '55', 37, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(48, '33991795', '33', 11, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(49, '65216705', '490', 43, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(50, '43411634', '83', 32, '2024-07-24 20:36:05', '2024-07-24 20:36:05');
+
 -- --------------------------------------------------------
 
 --
@@ -212,14 +252,9 @@ CREATE TABLE `permissions` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
-  `update_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Tronquer la table avant d'insérer `permissions`
---
-
-TRUNCATE TABLE `permissions`;
 -- --------------------------------------------------------
 
 --
@@ -234,11 +269,6 @@ CREATE TABLE `roles` (
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Tronquer la table avant d'insérer `roles`
---
-
-TRUNCATE TABLE `roles`;
 -- --------------------------------------------------------
 
 --
@@ -252,11 +282,6 @@ CREATE TABLE `roles_permission` (
   `role_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Tronquer la table avant d'insérer `roles_permission`
---
-
-TRUNCATE TABLE `roles_permission`;
 -- --------------------------------------------------------
 
 --
@@ -270,11 +295,6 @@ CREATE TABLE `role_permission` (
   `role_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Tronquer la table avant d'insérer `role_permission`
---
-
-TRUNCATE TABLE `role_permission`;
 -- --------------------------------------------------------
 
 --
@@ -289,11 +309,6 @@ CREATE TABLE `types` (
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Tronquer la table avant d'insérer `types`
---
-
-TRUNCATE TABLE `types`;
 --
 -- Déchargement des données de la table `types`
 --
@@ -310,22 +325,23 @@ INSERT INTO `types` (`id`, `name`, `created_at`, `updated_at`) VALUES
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `first_name` varchar(50) NOT NULL,
   `role_id` int(11) NOT NULL DEFAULT 2,
   `last_name` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(150) NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Tronquer la table avant d'insérer `users`
+-- Déchargement des données de la table `users`
 --
 
-TRUNCATE TABLE `users`;
+INSERT INTO `users` (`id`, `first_name`, `role_id`, `last_name`, `email`, `password`, `created_at`, `updated_at`) VALUES
+(1, 'João', 1, 'Souza Silva', 'teste@exemplo.us', '$2y$10$snoFj4q/8E.HR3M3x9LOje9JgaJqVMX5grNI4oMTJqWNU7NkSWr9i', '2024-07-24 22:35:14', '2024-07-24 22:35:14');
+
 --
 -- Index pour les tables déchargées
 --
@@ -345,8 +361,8 @@ ALTER TABLE `contacts`
 --
 -- Index pour la table `invoices`
 --
--- ALTER TABLE `invoices`
---   ADD PRIMARY KEY (`id`);
+ALTER TABLE `invoices`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `permissions`
@@ -384,8 +400,8 @@ ALTER TABLE `types`
 --
 -- Index pour la table `users`
 --
--- ALTER TABLE `users`
---   ADD PRIMARY KEY (`id`);
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -407,7 +423,7 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT pour la table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT pour la table `roles`
@@ -437,7 +453,7 @@ ALTER TABLE `types`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Contraintes pour les tables déchargées
