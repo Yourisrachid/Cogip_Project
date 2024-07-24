@@ -13,7 +13,7 @@ use PDOException;
 
 class Controller 
 {
-    private $dbManager;
+    protected $dbManager;
     private $responseObject;
     /*
     * @var $view, $data
@@ -58,59 +58,61 @@ class Controller
             if (isset($_POST['email']) && isset($_POST['password'])) {
                 $email = $_POST['email'];
                 $password = $_POST['password'];
-            
-                $query = 'SELECT * FROM users WHERE email = :email';
-                $result = $bdd->prepare($query);
-                $result->bindParam(':email', $email, PDO::PARAM_STR);
-                $result->execute();
-                $user = $result->fetch(PDO::FETCH_ASSOC);
+
+                $query = 'SELECT users.*, roles.name as role_name FROM users 
+                          LEFT JOIN roles ON users.role_id = roles.id 
+                          WHERE email = :email';
+                $stmt = $bdd->prepare($query);
+                $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+                $stmt->execute();
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 if ($user && password_verify($password, $user['password'])) {
                     if (session_status() === PHP_SESSION_NONE) {
                         session_start();
+                    session_regenerate_id(true);
                     }
-                    $_SESSION['user'] = $user; 
+                    $_SESSION['user'] = $user;
                     $_SESSION['first_name'] = $user['first_name'];
                     $_SESSION['last_name'] = $user['last_name'];
-                    $_SESSION['role_id'] = $user['role_id'];
-                    $data = ['first_name' =>  $user['first_name'], 'last_name' => $user['last_name'], 'role_id' => $user['role_id']];
+                    $_SESSION['role'] = $user['role_name'];
+
+                    $permissionsQuery = 'SELECT permissions.name FROM permissions 
+                                         LEFT JOIN role_permissions ON permissions.id = role_permissions.permission_id 
+                                         WHERE role_permissions.role_id = :role_id';
+                    $permissionsStmt = $bdd->prepare($permissionsQuery);
+                    $permissionsStmt->bindParam(':role_id', $user['role_id'], PDO::PARAM_INT);
+                    $permissionsStmt->execute();
+                    $permissions = $permissionsStmt->fetchAll(PDO::FETCH_COLUMN);
+
+                    $_SESSION['permissions'] = $permissions;
+
+                    return $this->jsonResponse(['message' => 'Login successful', 'user' => $user]);
                 } else {
-                    echo $this->json($response = $this->responseObject->Response('400', 'Invalid email or password'));
+                    return $this->jsonResponse(['error' => $this->json($response = $this->responseObject->Response('400', 'Invalid email or password'], 401)));
                 }
             } else {
-                echo $this->json($response= $this->responseObject->Response('400', 'email and password are required'));
+                return $this->jsonResponse(['error' => 'Email and password are required'], 400);
             }
 
         } catch (PDOException $e) {
-            echo $this->json($response= $this->responseObject->Response(500, 'Erreur de requête : ' . $e->getMessage()));
+            return $this->jsonResponse(['error' => 'Database error: ' . $e->getMessage()], 500);
         }
-        echo $this->json($response= $this->responseObject->ResponseData('200', 'Connected', $data));
     }
-    
-    public function logoutUser()
-    {
-        return $this->getLogoutUser();
-    }
-    private function getLogoutUser()
-    {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (isset($_SESSION['user'])) {
-            unset($_SESSION['user']);
-        }
-        session_destroy();
 
-        // Supprimer le cookie de session
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
-        }
-            echo $this->json($response= $this->responseObject->Response(200, 'disconnected'));
-            exit();
+    protected function jsonResponse($data, $status = 200)
+    {
+        http_response_code($status);
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit();
+    }
+
+
+
+    public function newInvoice()
+    {
+        echo $this->postNewInvoice();
     }
     public function newUser()
     {
