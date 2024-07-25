@@ -223,10 +223,13 @@ class HomeController extends Controller
     public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? null;
-            $password = $_POST['password'] ?? null;
+            $data = json_decode(file_get_contents("php://input"), true);
+
+            $email = $data['email'] ?? null;
+            $password = $data['password'] ?? null;
 
             if ($email && $password) {
+
                 $user = $this->authenticateUser($email, $password);
                 if (isset($user['error'])) {
                     return $this->jsonResponse(['error' => $user['error']], 401);
@@ -239,6 +242,41 @@ class HomeController extends Controller
         } else {
             return $this->jsonResponse(['message' => 'Please login']);
         }
+    }
+
+    private function isUserLoggedIn()
+    {
+        // if (session_status() === PHP_SESSION_NONE || isset($_SESSION)) {
+        //     session_start();
+        // }
+        var_dump($_SESSION);
+        if (isset($_SESSION['user']['id'])){
+            return[
+                'status'=> 'success',
+                'isAuthenticated'=> true,
+                'user' => [
+                    'id'=> $_SESSION['user']['id'],
+                    'email'=> $_SESSION['user']['email'] ?? null,
+                ]
+            ];
+        } else {
+            return [
+                'status'=> 'error',
+                'isAuthenticated'=> false,
+                'message'=> 'User not logged in'
+            ];
+        }
+    }
+
+    public function checkAuth()
+    {
+        $result= $this->isUserLoggedIn();
+        if ($result['isAuthenticated']){
+            http_response_code(200);
+        }else{
+            http_response_code(401);
+        }
+        return $this->jsonResponse($result);
     }
 
     public function register()
@@ -299,12 +337,14 @@ class HomeController extends Controller
             $permissionsStmt->execute();
             $permissions = $permissionsStmt->fetchAll(PDO::FETCH_COLUMN);
 
-            session_start();
+            // session_start();
             $_SESSION['user'] = $user;
             $_SESSION['first_name'] = $user['first_name'];
             $_SESSION['last_name'] = $user['last_name'];
             $_SESSION['role'] = $user['role_name'];
             $_SESSION['permissions'] = $permissions;
+
+            var_dump($_SESSION);
 
             return $user;
         }

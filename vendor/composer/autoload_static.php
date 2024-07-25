@@ -22,6 +22,7 @@ class ComposerStaticInit3294db2790fb443d29d4b75aded0a7f4
         ),
         'F' => 
         array (
+            'Firebase\\JWT\\' => 13,
             'Faker\\' => 6,
         ),
         'A' => 
@@ -42,6 +43,10 @@ class ComposerStaticInit3294db2790fb443d29d4b75aded0a7f4
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'Faker\\' => 
         array (

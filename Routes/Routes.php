@@ -214,6 +214,9 @@ $router->post('/signup', function () {
 $router->post('/login', function () {
     (new HomeController)->login();
 });
+$router->post('/check-auth', function () {
+    (new HomeController)->checkAuth();
+});
 // $router->post('/logout', function(){
 //     (new Controller)->logoutUser();
 // });
