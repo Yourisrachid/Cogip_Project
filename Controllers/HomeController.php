@@ -8,6 +8,7 @@ use App\Models\Contact;
 use App\Models\Invoice;
 use App\Models\Users;
 use App\Core\Controller;
+use DateTime;
 
 class HomeController extends Controller
 {
@@ -88,6 +89,8 @@ class HomeController extends Controller
         }
 
         $company = new Company();
+        $data['created_at'] = (new DateTime())->format('Y-m-d H:i:s');
+        $data['updated_at'] = (new DateTime())->format('Y-m-d H:i:s');
         $result = $company->createCompany($data);
         if ($result) {
             return $this->jsonResponse(['message' => 'Company created !'], 201);
@@ -182,6 +185,8 @@ class HomeController extends Controller
         $data = json_decode(file_get_contents("php://input"), true);
 
         $contact = new Contact();
+        $data['created_at'] = (new DateTime())->format('Y-m-d H:i:s');
+        $data['updated_at'] = (new DateTime())->format('Y-m-d H:i:s');
         $result = $contact->createContact($data);
         if ($result) {
             return $this->jsonResponse(['message' => 'Contact created !'], 201);
@@ -411,6 +416,8 @@ class HomeController extends Controller
         }
 
         $invoice = new Invoice();
+        $data['created_at'] = (new DateTime())->format('Y-m-d H:i:s');
+        $data['updated_at'] = (new DateTime())->format('Y-m-d H:i:s');
         $result = $invoice->createInvoice($data);
         if ($result) {
             return $this->jsonResponse(['message' => 'Invoice created !'], 201);

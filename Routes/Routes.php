@@ -102,28 +102,28 @@ $router->mount('/jwt', function () use ($router) {
     });
 
     $router->post('/contacts', function () {
-        Middleware::permission('create_contact');
+        // Middleware::permission('create_contact');
         (new HomeController)->createContact();
     });
     $router->put('/contacts/(\d+)', function ($id) {
-        Middleware::permission('edit_contact');
+        // Middleware::permission('edit_contact');
         (new HomeController)->updateContact($id);
     });
     $router->delete('/contacts/(\d+)', function ($id) {
-        Middleware::permission('delete_contact');
+        // Middleware::permission('delete_contact');
         (new HomeController)->deleteContact($id);
     });
 
     $router->post('/invoices', function () {
-        Middleware::permission('create_invoice');
+        // Middleware::permission('create_invoice');
         (new HomeController)->createInvoice();
     });
     $router->put('/invoices/(\d+)', function ($id) {
-        Middleware::permission('edit_invoice');
+        // Middleware::permission('edit_invoice');
         (new HomeController)->updateInvoice($id);
     });
     $router->delete('/invoices/(\d+)', function ($id) {
-        Middleware::permission('delete_invoice');
+        // Middleware::permission('delete_invoice');
         (new HomeController)->deleteInvoice($id);
     });
 });
