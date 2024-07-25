@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mer. 24 juil. 2024 à 21:17
+-- Généré le : jeu. 25 juil. 2024 à 22:05
 -- Version du serveur : 11.3.2-MariaDB
 -- Version de PHP : 8.3.6
 
@@ -94,7 +94,8 @@ INSERT INTO `companies` (`id`, `name`, `type_id`, `country`, `tva`, `created_at`
 (49, 'Raynor Ltd', 2, 'Sao Tome and Principe', 'SH287940101', '2024-07-17 20:51:42', '2024-07-17 20:51:42'),
 (50, 'Franecki Inc', 1, 'Gambia', 'CK194316605', '2024-07-17 20:51:42', '2024-07-17 20:51:42'),
 (51, 'Durgan, Larkin and Johnson', 1, 'Kuwait', 'SL174074433', '2024-07-17 20:51:42', '2024-07-17 20:51:42'),
-(52, 'Haag, Dibbert and Schimmel', 1, 'New Caledonia', 'DZ175463343', '2024-07-17 20:51:42', '2024-07-17 20:51:42');
+(52, 'Haag, Dibbert and Schimmel', 1, 'New Caledonia', 'DZ175463343', '2024-07-17 20:51:42', '2024-07-17 20:51:42'),
+(53, 'fkdl', 2, 'mexique', '214563465', '2024-07-25 21:54:12', '2024-07-25 21:54:12');
 
 -- --------------------------------------------------------
 
@@ -167,7 +168,8 @@ INSERT INTO `contacts` (`id`, `name`, `company_id`, `email`, `phone`, `created_a
 (47, 'Lilian Hettinger', 18, 'teresa72@friesen.biz', '607-428-0099', '2024-07-17 21:27:03', '2024-07-17 21:27:03'),
 (48, 'Rowan Collins', 14, 'myrna.luettgen@pacocha.com', '+15397632378', '2024-07-17 21:27:03', '2024-07-17 21:27:03'),
 (49, 'Tanner Sporer', 36, 'godfrey59@hotmail.com', '+1-540-471-0918', '2024-07-17 21:27:03', '2024-07-17 21:27:03'),
-(50, 'Christina Daniel', 32, 'wilton.gutmann@yahoo.com', '239.831.2196', '2024-07-17 21:27:03', '2024-07-17 21:27:03');
+(50, 'Christina Daniel', 32, 'wilton.gutmann@yahoo.com', '239.831.2196', '2024-07-17 21:27:03', '2024-07-17 21:27:03'),
+(51, 'Jon Stewart Doe', 25, 'test@example.us', '6019521325', '2024-07-25 21:59:30', '2024-07-25 21:59:30');
 
 -- --------------------------------------------------------
 
@@ -239,7 +241,9 @@ INSERT INTO `invoices` (`id`, `ref`, `price`, `id_company`, `created_at`, `updat
 (47, '18651966', '55', 37, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
 (48, '33991795', '33', 11, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
 (49, '65216705', '490', 43, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
-(50, '43411634', '83', 32, '2024-07-24 20:36:05', '2024-07-24 20:36:05');
+(50, '43411634', '83', 32, '2024-07-24 20:36:05', '2024-07-24 20:36:05'),
+(51, 'abc', '50', 10, '2024-07-25 21:40:15', '2024-07-25 21:40:15'),
+(52, 'def', '60', 25, '2024-07-25 21:45:15', '2024-07-25 21:45:15');
 
 -- --------------------------------------------------------
 
@@ -272,27 +276,14 @@ CREATE TABLE `roles` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `roles_permission`
+-- Structure de la table `role_permissions`
 --
 
-DROP TABLE IF EXISTS `roles_permission`;
-CREATE TABLE `roles_permission` (
+DROP TABLE IF EXISTS `role_permissions`;
+CREATE TABLE `role_permissions` (
   `id` int(11) NOT NULL,
   `permission_id` int(11) DEFAULT NULL,
   `role_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `role_permission`
---
-
-DROP TABLE IF EXISTS `role_permission`;
-CREATE TABLE `role_permission` (
-  `id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -340,7 +331,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `role_id`, `last_name`, `email`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'João', 1, 'Souza Silva', 'teste@exemplo.us', '$2y$10$snoFj4q/8E.HR3M3x9LOje9JgaJqVMX5grNI4oMTJqWNU7NkSWr9i', '2024-07-24 22:35:14', '2024-07-24 22:35:14');
+(1, 'João', 1, 'Souza Silva', 'teste@exemplo.us', '$2y$10$snoFj4q/8E.HR3M3x9LOje9JgaJqVMX5grNI4oMTJqWNU7NkSWr9i', '2024-07-24 22:35:14', '2024-07-24 22:35:14'),
+(3, 'Gottfried', 1, 'Leibniz', 'test@beispiel.de', '$2y$10$WTlTtRdT4uXWknRhccXFi.ygf5yR6ofdGB4zJCec5P5EO0j.zm0bO', '2024-07-25 23:08:50', '2024-07-25 23:08:50');
 
 --
 -- Index pour les tables déchargées
@@ -377,19 +369,12 @@ ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `roles_permission`
+-- Index pour la table `role_permissions`
 --
-ALTER TABLE `roles_permission`
+ALTER TABLE `role_permissions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `permission_id` (`permission_id`),
   ADD KEY `role_id` (`role_id`);
-
---
--- Index pour la table `role_permission`
---
-ALTER TABLE `role_permission`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `permission_id` (`permission_id`,`role_id`);
 
 --
 -- Index pour la table `types`
@@ -411,19 +396,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT pour la table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT pour la table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT pour la table `roles`
@@ -432,15 +417,9 @@ ALTER TABLE `roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `roles_permission`
+-- AUTO_INCREMENT pour la table `role_permissions`
 --
-ALTER TABLE `roles_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `role_permission`
---
-ALTER TABLE `role_permission`
+ALTER TABLE `role_permissions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -453,18 +432,18 @@ ALTER TABLE `types`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `roles_permission`
+-- Contraintes pour la table `role_permissions`
 --
-ALTER TABLE `roles_permission`
-  ADD CONSTRAINT `roles_permission_ibfk_1` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`),
-  ADD CONSTRAINT `roles_permission_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+ALTER TABLE `role_permissions`
+  ADD CONSTRAINT `role_permissions_ibfk_1` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`),
+  ADD CONSTRAINT `role_permissions_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
