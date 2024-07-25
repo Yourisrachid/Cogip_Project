@@ -96,9 +96,6 @@ class Invoice
 
 
 
-
-
-
     public function deleteInvoice($id)
     {
         $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';

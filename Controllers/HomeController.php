@@ -6,6 +6,7 @@ use PDO;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Invoice;
+use App\Models\Users;
 use App\Core\Controller;
 
 class HomeController extends Controller
@@ -310,13 +311,6 @@ class HomeController extends Controller
         return ['error' => 'Invalid email or password !'];
     }
 
-    protected function jsonResponse($data, $status = 200)
-    {
-        http_response_code($status);
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        exit();
-    }
 
     /////// Invoices ///////
 
@@ -353,4 +347,103 @@ class HomeController extends Controller
 
         return $this->jsonResponse($response);
     }
+
+
+    public function getInvoice($id)
+    {
+        $invoice = new Invoice();
+        $invoiceData = $invoice->getInvoiceById($id);
+
+        if ($invoiceData) {
+            return $this->jsonResponse($invoiceData);
+        } else {
+            return $this->jsonResponse(['error' => "Can't find this invoice !"], 404);
+        }
+    }
+
+
+
+    public function createInvoice()
+    {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data || !isset($data['ref']) || !isset($data['price']) || !isset($data['id_company']) ) {
+            return $this->jsonResponse(['error' => 'Invalid input'], 400);
+        }
+
+        $invoice = new Invoice();
+        $result = $invoice->createInvoice($data);
+        if ($result) {
+            return $this->jsonResponse(['message' => 'Invoice created !'], 201);
+        } else {
+            return $this->jsonResponse(['error' => 'Failed to create invoice !'], 500);
+        }
+    }
+
+    public function updateInvoice($id)
+    {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!$data || !isset($data['ref']) || !isset($data['price']) || !isset($data['id_company']) ) {
+            return $this->jsonResponse(['error' => 'Invalid input'], 400);
+        }
+
+        $invoice = new Invoice();
+        $result = $invoice->updateInvoice($id, $data);
+        if ($result) {
+            return $this->jsonResponse(['message' => 'Invoice updated !'], 200);
+        } else {
+            return $this->jsonResponse(['error' => 'Failed to update invoice !'], 500);
+        }
+    }
+
+    public function deleteInvoice($id)
+    {
+        $invoice = new Invoice();
+        $result = $invoice->deleteInvoice($id);
+        if ($result) {
+            return $this->jsonResponse(['message' => 'invoice deleted!'], 200);
+        } else {
+            return $this->jsonResponse(['error' => 'Failed to delete invoice!'], 500);
+        }
+    }
+
+
+
+
+    // USERS -------------------------------------
+
+
+
+    public function getUser($id)
+    {
+        $userModel = new Users();
+        $user = $userModel->getUserById($id);
+        return $this->jsonResponse($user);
+    }
+
+    public function updateUserRole($id)
+    {
+        $data = json_decode(file_get_contents("php://input"), true);
+        if (!isset($data['role_id'])) {
+            return $this->jsonResponse(['error' => 'Role ID is required'], 400);
+        }
+
+        $userModel = new Users();
+        $success = $userModel->updateUserRole($id, $data['role_id']);
+        if ($success) {
+            return $this->jsonResponse(['message' => 'User role updated successfully']);
+        } else {
+            return $this->jsonResponse(['error' => 'Failed to update user role'], 500);
+        }
+    }
+
+
+    protected function jsonResponse($data, $status = 200)
+    {
+        http_response_code($status);
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit();
+    }
 }
+
+

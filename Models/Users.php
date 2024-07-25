@@ -57,4 +57,25 @@ class Users
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+    public function getUserById($id)
+    {
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+        $bdd = $this->dbManager->getConnection();
+        $stmt = $bdd->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateUserRole($id, $role_id)
+    {
+        $query = 'UPDATE ' . $this->table . ' SET role_id = :role_id WHERE id = :id';
+        $bdd = $this->dbManager->getConnection();
+        $stmt = $bdd->prepare($query);
+        $stmt->bindParam(':role_id', $role_id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
 }

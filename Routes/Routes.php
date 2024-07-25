@@ -6,7 +6,6 @@ use App\Core\Controller;
 use App\Core\Middleware;
 use Bramus\Router\Router;
 use App\Controllers\HomeController;
-use App\Controllers\UserController;
 use App\Controllers\CompanySeederController;
 use App\Controllers\ContactSeederController;
 use App\Controllers\InvoiceSeederController;
@@ -29,7 +28,7 @@ $router = new Router();
 // });
 
 $router->mount('/admin', function () use ($router) {
-    $router->before('GET|POST', '/.*', function () {
+    $router->before('GET|POST|PUT|DELETE', '/.*', function () {
         if ($_SESSION['role_id'] !== 1) { // Suppose que 1 est l'ID pour les administrateurs
             $response = ['status' => 403, 'message' => 'Access denied'];
             $controller = new Controller();
@@ -37,12 +36,67 @@ $router->mount('/admin', function () use ($router) {
             exit();
         }
     });
-    $router->get('/test', function () {
-        $response = ['status' => '200', 'role_id' => $_SESSION['role_id']];
-        $controller = new Controller();
-        echo $controller->returnJson($response);
-        exit();
+
+    $router->post('/companies', function () {
+        Middleware::permission('create_company');
+        // Middleware::sessionTimeout();
+        (new HomeController)->createCompany();
     });
+    $router->put('/companies/(\d+)', function ($id) {
+        Middleware::permission('edit_company');
+        // Middleware::sessionTimeout();
+        (new HomeController)->updateCompany($id);
+    });
+    $router->delete('/companies/(\d+)', function ($id) {
+        Middleware::permission('delete_company');
+        // Middleware::sessionTimeout();
+        (new HomeController)->deleteCompany($id);
+    });
+
+
+
+    $router->post('/contacts', function () {
+        Middleware::permission('create_contact');
+        // Middleware::sessionTimeout();
+        (new HomeController)->createContact();
+    });
+    $router->put('/contacts/(\d+)', function ($id) {
+        Middleware::permission('edit_contact');
+        // Middleware::sessionTimeout();
+        (new HomeController)->updateContact($id);
+    });
+    $router->delete('/contacts/(\d+)', function ($id) {
+        Middleware::permission('delete_contact');
+        // Middleware::sessionTimeout();
+        (new HomeController)->deleteContact($id);
+    });
+
+
+
+    $router->post('/invoices', function () {
+        Middleware::permission('create_invoice');
+        // Middleware::sessionTimeout();
+        (new HomeController)->createInvoice();
+    });
+    $router->put('/invoices/(\d+)', function ($id) {
+        Middleware::permission('edit_invoice');
+        // Middleware::sessionTimeout();
+        (new HomeController)->updateInvoice($id);
+    });
+    $router->delete('/invoices/(\d+)', function ($id) {
+        Middleware::permission('delete_invoice');
+        // Middleware::sessionTimeout();
+        (new HomeController)->deleteInvoice($id);
+    });
+
+
+    $router->put('/users/(\d+)/role', function ($id) {
+        (new HomeController)->updateUserRole($id);
+    });
+
+
+
+
 });
 
 $router->mount('/moderator', function () use ($router) {
@@ -54,12 +108,27 @@ $router->mount('/moderator', function () use ($router) {
             exit();
         }
     });
-    $router->get('/test', function () {
-        $response = ['status' => '200', 'role_id' => $_SESSION['role_id']];
-        $controller = new Controller();
-        echo $controller->returnJson($response);
-        exit();
+
+    $router->post('/companies', function () {
+        Middleware::permission('create_company');
+        // Middleware::sessionTimeout();
+        (new HomeController)->createCompany();
     });
+
+
+    $router->post('/contacts', function () {
+        Middleware::permission('create_contact');
+        // Middleware::sessionTimeout();
+        (new HomeController)->createContact();
+    });
+
+
+    $router->post('/invoices', function () {
+        Middleware::permission('create_invoice');
+        // Middleware::sessionTimeout();
+        (new HomeController)->createInvoice();
+    });
+
 });
 
 $router->get('/', function () {
@@ -90,21 +159,7 @@ $router->get('/companies/(\d+)', function ($id) {
     // Middleware::sessionTimeout();
     (new HomeController)->getCompany($id);
 });
-$router->post('/companies', function () {
-    Middleware::permission('create_company');
-    // Middleware::sessionTimeout();
-    (new HomeController)->createCompany();
-});
-$router->put('/companies/(\d+)', function ($id) {
-    Middleware::permission('edit_company');
-    // Middleware::sessionTimeout();
-    (new HomeController)->updateCompany($id);
-});
-$router->delete('/companies/(\d+)', function ($id) {
-    Middleware::permission('delete_company');
-    // Middleware::sessionTimeout();
-    (new HomeController)->deleteCompany($id);
-});
+
 
 
 
@@ -121,21 +176,7 @@ $router->get('/contacts/(\d+)', function ($id) {
     // Middleware::sessionTimeout();
     (new HomeController)->getContact($id);
 });
-$router->post('/contacts', function () {
-    Middleware::permission('create_contact');
-    // Middleware::sessionTimeout();
-    (new HomeController)->createContact();
-});
-$router->put('/contacts/(\d+)', function ($id) {
-    Middleware::permission('edit_contact');
-    // Middleware::sessionTimeout();
-    (new HomeController)->updateContact($id);
-});
-$router->delete('/contacts/(\d+)', function ($id) {
-    Middleware::permission('delete_contact');
-    // Middleware::sessionTimeout();
-    (new HomeController)->deleteContact($id);
-});
+
 
 
 // Invoices
@@ -144,6 +185,11 @@ $router->delete('/contacts/(\d+)', function ($id) {
 $router->get('/invoices', function () {
     (new HomeController)->invoices();
 });
+$router->get('/invoices/(\d+)', function ($id) {
+    (new HomeController)->getInvoice($id);
+});
+
+
 // $router->post('/new-invoices', function(){
 //     (new Controller)->newInvoice();
 // });
@@ -170,9 +216,6 @@ $router->post('/login', function () {
 });
 // $router->post('/logout', function(){
 //     (new Controller)->logoutUser();
-// });
-// $router->get('/user', function(){
-//     (new Controller)->allUser();
 // });
 // $router->post('/new-invoices', function(){
 //     (new Controller)->newInvoice();
@@ -209,5 +252,18 @@ $router->post('/register', function () {
 $router->get('/seed-invoices', function () {
     (new InvoiceSeederController)->__invoke();
 });
+
+
+
+
+$router->get('/users', function () {
+    (new Controller)->allUser();
+});
+
+$router->get('/users/(\d+)', function ($id) {
+    (new HomeController)->getUser($id);
+});
+
+
 
 $router->run();

@@ -101,6 +101,40 @@ class Controller
         }
     }
 
+    public function allUser()
+    {
+        echo $this->getAllUsers();
+    }
+    public function getAllUsers() {
+        $user = new Users();
+
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+
+        $filters = [];
+        if (isset($_GET['first_name'])) {
+            $filters['first_name'] = $_GET['first_name'];
+        }
+        if (isset($_GET['last_name'])) {
+            $filters['last_name'] = $_GET['last_name'];
+        }
+        if (isset($_GET['role_id'])) {
+            $filters['role_id'] = $_GET['role_id'];
+        }
+        if (isset($_GET['email'])) {
+            $filters['email'] = $_GET['email'];
+        }
+        $sort = [];
+        if (isset($_GET['sort_by'])) {
+            $sort[$_GET['sort_by']] = isset($_GET['order']) && strtolower($_GET['order']) === 'desc' ? 'DESC' : 'ASC';
+        }
+
+        $fetchAll = isset($_GET['all']) && $_GET['all'] == 'true';
+        
+        $users = $user->getAllUser($page, $limit, $filters, $sort, $fetchAll);
+        return $this->json($response= $this->responseObject->ResponseData(200, 'OK', $users));
+    }
+
     protected function jsonResponse($data, $status = 200)
     {
         http_response_code($status);
@@ -185,39 +219,8 @@ class Controller
             ]);
         }
     }
-    public function allUser()
-    {
-        echo $this->getAllUsers();
-    }
-    public function getAllUsers() {
-        $user = new Users();
 
-        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-        $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 
-        $filters = [];
-        if (isset($_GET['first_name'])) {
-            $filters['first_name'] = $_GET['first_name'];
-        }
-        if (isset($_GET['last_name'])) {
-            $filters['last_name'] = $_GET['last_name'];
-        }
-        if (isset($_GET['role_id'])) {
-            $filters['role_id'] = $_GET['role_id'];
-        }
-        if (isset($_GET['email'])) {
-            $filters['email'] = $_GET['email'];
-        }
-        $sort = [];
-        if (isset($_GET['sort_by'])) {
-            $sort[$_GET['sort_by']] = isset($_GET['order']) && strtolower($_GET['order']) === 'desc' ? 'DESC' : 'ASC';
-        }
-
-        $fetchAll = isset($_GET['all']) && $_GET['all'] == 'true';
-        
-        $users = $user->getAllUser($page, $limit, $filters, $sort, $fetchAll);
-        return $this->json($response= $this->responseObject->ResponseData(200, 'OK', $users));
-    }
 
     // public function newInvoice()
     // {
