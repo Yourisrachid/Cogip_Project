@@ -56,4 +56,36 @@ class Users
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getById($id) {
+        $bdd = $this->dbManager->getConnection();
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+        $stmt = $bdd->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /*public function updateUser($id, $data) {
+        try {
+            $bdd = $this->dbManager->getConnection();
+            $query = 'UPDATE ' . $this->table . ' SET role_id = :role_id, first_name = :first_name, last_name = :last_name, email = :email ';
+            $stmt = $bdd->prepare($query);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':role_id', $data['role_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':first_name', $data['first_name'], PDO::PARAM_STR);
+            $stmt->bindParam(':last_name', $data['last_name'], PDO::PARAM_STR);
+            $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return [
+                'status' => 500,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
+        } catch (Exception $e) {
+            return [
+                'status' => 400,
+                'message' => 'Error: ' . $e->getMessage()
+            ];
+        }
+    }*/
 }

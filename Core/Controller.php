@@ -182,11 +182,72 @@ class Controller
             ]);
         }
     }
+    public function updateUserById($id)
+    {
+        echo $this->postUpdateUser($id);
+    }
+    private function postUpdateUser($id)
+    {
+        try {
+            $bdd = $this->dbManager->getConnection();
+            $inputJSON = file_get_contents('php://input');
+            $_PUT = json_decode($inputJSON, true);
+
+            $role_id = $_PUT['role_id'];
+            $first_name = $_PUT['first_name'];
+            $last_name = $_PUT['last_name'];
+            $email = $_PUT['email'];
+            
+            $query = 'UPDATE users SET role_id = :role_id, first_name = :first_name, last_name = :last_name, email = :email, updated_at = NOW() WHERE id = :id';
+
+            $result = $bdd->prepare($query);
+            $result->bindParam(':id', $id, PDO::PARAM_INT);
+            $result->bindParam(':role_id', $role_id, PDO::PARAM_INT);
+            $result->bindParam(':first_name', $first_name, PDO::PARAM_STR);
+            $result->bindParam(':last_name', $last_name, PDO::PARAM_STR);
+            $result->bindParam(':email', $email, PDO::PARAM_STR);  
+            $result->execute();
+
+            if ($result->rowCount() > 0) {
+                $response = $this->responseObject->Response("200", "User updated successfully");
+            } else {
+                $response = $this->responseObject->Response('404', 'User not found or no changes made');
+            }
+
+            return $this->json($response);
+
+        } catch (PDOException $e) {
+            return $this->json([
+                'status' => 500,
+                'message' => 'Database error: ' . $e->getMessage()
+            ]);
+        } catch (Exception $e) {
+            return $this->json([
+                'status' => 400,
+                'message' => 'Error: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function UserById($id)
+    {
+        echo $this->getUserById($id);
+    }
+    private function getUserById($id) {
+        $user = new Users();
+        $userData = $user->getById($id);
+        
+        if ($userData) {
+            return $this->json($response= $this->responseObject->ResponseData(200, 'OK', $userData));
+        } else {
+            return $this->json($response= $this->responseObject->Response('404', 'User not found'));
+        }
+    }
     public function allUser()
     {
         echo $this->getAllUsers();
     }
-    public function getAllUsers() {
+    private function getAllUsers() {
         $user = new Users();
 
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -280,13 +341,6 @@ class Controller
 
     public function paginatedInvoices()
     {
-        /*$offset = ($page - 1) * $limit;
-        $query = 'SELECT * FROM invoices';
-
-        if ($startDate && $endDate) {
-            $query .= ' WHERE created_at BETWEEN :startDate AND :endDate';
-        }
-        $query .= ' LIMIT :limit OFFSET :offset';*/
         echo $this->getInvoices();
     }
 

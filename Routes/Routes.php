@@ -130,15 +130,19 @@ $router->get('/all-invoices', function(){
 $router->get('/last-invoices', function(){
     (new Controller)->lastInvoice();
 });
-$router->get('/page-invoices/{page}/{limit}', function($page, $limit){
-    (new Controller)->paginatedInvoices($page, $limit);
+$router->get('/page-invoices', function(){
+    (new Controller)->paginatedInvoices();
+});
+$router->get('/update-invoices/(\d+)', function($id){
+    (new Controller)->updateInvoices($id);
+});
+$router->Delete('/delete-invoices/(\d+)', function($id){
+    (new Controller)->deleteInvoice($id);
 });
 
 
-// Test connection
+//route USER
 
-
-//route API
 $router->post('/signup', function(){
     (new Controller)->newUser();
 });
@@ -151,24 +155,14 @@ $router->post('/logout', function(){
 $router->get('/user', function(){
     (new Controller)->allUser();
 });
-$router->post('/new-invoices', function(){
-    (new Controller)->newInvoice();
+$router->get('/user/(\d+)', function($id){
+    (new Controller)->UserById($id);
 });
-$router->get('/all-invoices', function(){
-    (new Controller)->allInvoice();
+$router->post('/update-user/(\d+)', function($id){
+    (new Controller)->updateUserById($id);
 });
-$router->get('/last-invoices', function(){
-    (new Controller)->lastInvoice();
-});
-$router->get('/page-invoices', function(){
-    (new Controller)->paginatedInvoices();
-});
-$router->get('/update-invoices/(\d+)', function($id){
-    (new Controller)->updateInvoices($id);
-});
-$router->Delete('/delete-invoices/(\d+)', function($id){
-    (new Controller)->deleteInvoice($id);
-});
+
+
 
 
 $router->get('/seed-companies', function() {
